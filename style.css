@@ -1,0 +1,25 @@
+body {
+  margin: 0 auto;
+}
+/* TODO:find a short way to select them all */
+
+#part0,
+#part1,
+#part2,
+#part3 {
+  margin: 0 2px;
+}
+
+.main {
+  display: flex;
+  width: 404px;
+  margin: 1% auto;
+}
+
+#left {
+  width: 300px;
+}
+
+#right {
+  width: 300px;
+}
