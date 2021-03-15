@@ -26,16 +26,17 @@ var img = new Image();
 //We will set image source to randomly generated image source that we created before
 img.src = imageSrc;
 
-//When image is loaded run the split method
-img.onload = split_4;
+//Split when image has loaded
+img.onload = split4;
 
 //Here we are splitting the image into 4 parts
-function split_4() {
-  var w2 = img.width / 2;
-  var h2 = img.height / 2;
+function split4() {
+  var div = 2;
+  var w2 = img.width / div;
+  var h2 = img.height / div;
 
   for (var i = 0; i < 4; i++) {
-    var x = (-w2 * i) % (w2 * 2);
+    var x = (-w2 * i) % (img.width); 
     var y = h2 * i <= h2 ? 0 : -h2;
 
     //We generate another random number for the rotate splitted parts of the image
@@ -44,7 +45,7 @@ function split_4() {
     canvas.width = w2;
     canvas.height = h2;
 
-    ctx.drawImage(this, x, y, w2 * 2, h2 * 2);
+    ctx.drawImage(this, x, y,img.width,img.height);
 
     parts.push(canvas.toDataURL());
 
