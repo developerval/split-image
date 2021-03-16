@@ -1,6 +1,29 @@
 //TODO: Is there any way to write filenames to an array?
 //We create an image array,later we will randomly pick one of them to split, png files are better to use?
-var imageList = ["cat0", "cat1", "cat2", "cat3", "cat4", "cat5", "cat6"];
+var imageList = [
+  "cat0",
+  "cat1",
+  "cat2",
+  "cat3",
+  "cat4",
+  "cat5",
+  "cat6",
+  "cat7",
+];
+var dXdY = [
+  [0, 0],
+  [-1, 0],
+  [0, -1],
+  [-1, -1],
+  [0, -2],
+  [-1, -2],
+  [-2, -2],
+  [-2, 0],
+  [-2, -1],
+];
+
+//Define how many pieces we want to slice the image 4-9-16-25-36
+var sliceInto = 4;
 
 //We generate a random number and pass it to a variable
 var randomNumber = Math.floor(Math.random() * imageList.length + 1);
@@ -22,30 +45,46 @@ var parts = [];
 
 //An instance of an Image object
 var img = new Image();
-
 //We will set image source to randomly generated image source that we created before
 img.src = imageSrc;
 
 //Split when image has loaded
-img.onload = split4;
+img.onload = split;
 
 //Here we are splitting the image into 4 parts
-function split4() {
-  var div = 2;
-  var w2 = img.width / div;
-  var h2 = img.height / div;
+function split() {
+  //we are going to divide image width and height into square root of given sliceInto value
+  // for example ıf we want to divide ınto 9 pıeces , the image w and h must be divided into 3, the square root of 9
+  var div = Math.sqrt(sliceInto);
 
-  for (var i = 0; i < 4; i++) {
-    var x = (-w2 * i) % (img.width); 
-    var y = h2 * i <= h2 ? 0 : -h2;
+  var dividedWidth = img.width / div;
+  var dividedHeight = img.height / div;
+
+  canvas.width = dividedWidth;
+  canvas.height = dividedHeight;
+
+  for (let i = 0; i < sliceInto; i++) {
+    //we take the array from the dXdY array of arrays and push the value pair to a newArray as a seperated value.
+    var newArray = [];
+    dXdY[i].forEach((element) => {
+      newArray.push(element);
+    });
+    // we assign this seperated value pair to x and y
+    var x = newArray[0];
+    var y = newArray[1];
 
     //We generate another random number for the rotate splitted parts of the image
     var randomDeg = Math.floor(Math.random() * 3 + 1); // Random number between 1-4
 
-    canvas.width = w2;
-    canvas.height = h2;
+    //console.log(x + "  " + y);
 
-    ctx.drawImage(this, x, y,img.width,img.height);
+    ctx.drawImage(
+      this,
+      x * dividedWidth,
+      y * dividedHeight,
+      img.width,
+      img.height
+    );
 
     parts.push(canvas.toDataURL());
 
@@ -54,6 +93,7 @@ function split4() {
     var div = document.getElementById("right");
     div.appendChild(slicedImage);
     slicedImage.setAttribute("id", "part" + [i]);
+    slicedImage.setAttribute("class", "sliced");
     //style="width:128px;height:128px;" can be used also
     slicedImage.setAttribute("width", "96", "height", "96");
     slicedImage.setAttribute(
@@ -103,6 +143,10 @@ function checkStatus() {
     return;
   }
 }
+
+//TODO:remove eventlisteners before calling gameover() 
+//for loop to remove?
+
 //When game ends do something.
 //TODO: Show score (Time passed in seconds x 5)
 function gameOver() {

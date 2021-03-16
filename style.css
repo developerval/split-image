@@ -3,10 +3,7 @@ body {
 }
 /* TODO:find a short way to select them all */
 
-#part0,
-#part1,
-#part2,
-#part3 {
+.sliced {
   margin: 0 2px;
 }
 
